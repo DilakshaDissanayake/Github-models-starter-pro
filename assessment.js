@@ -108,5 +108,6 @@ async function chatLoop() {
   });
 }
 
+
 console.log('🚀 Multi-turn Coding Assistant started (type "exit" to quit)');
 chatLoop();
