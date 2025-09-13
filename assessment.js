@@ -54,3 +54,60 @@
 // Example:
 // User: "How do I create a function in JavaScript?"
 // Bot: "You can create a function using the `function` keyword or as an arrow function. Here's an example: ..."
+
+import OpenAI from "openai";
+import dotenv from "dotenv";
+import readline from "readline";
+
+dotenv.config();
+const token = process.env["GITHUB_TOKEN"];
+const endpoint = "https://models.github.ai/inference";
+const modelName = "openai/gpt-4o";
+
+const client = new OpenAI({ baseURL: endpoint, apiKey: token });
+
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
+
+let messages = [
+  {
+    role: "system",
+    content:
+      "You are a helpful coding assistant. Provide examples, explanations, debugging help, and best practices for multiple programming languages.",
+  },
+];
+
+async function chatLoop() {
+  rl.question("You: ", async (input) => {
+    if (input.trim().toLowerCase() === "exit") {
+      console.log("🤖 Bot: Goodbye! Happy coding!");
+      rl.close();
+      return;
+    }
+
+    messages.push({ role: "user", content: input });
+
+    try {
+      const response = await client.chat.completions.create({
+        model: modelName,
+        messages: messages,
+      });
+
+      const reply = response.choices[0].message.content;
+      console.log("Bot:", reply);
+
+      messages.push({ role: "assistant", content: reply });
+    } catch (error) {
+      console.error(" Error:", error.message);
+    }
+
+    chatLoop();
+  });
+}
+
+
+console.log('🚀 Multi-turn Coding Assistant started (type "exit" to quit)');
+chatLoop();

@@ -44,8 +44,8 @@ function getFlightInfo({originCity, destinationCity}){
   // Mock data for demonstration - would be real API call in production
   if (originCity === "Seattle" && destinationCity === "Miami"){
     return JSON.stringify({
-      airline: "Delta",
-      flight_number: "DL123",
+      airline: "Sri Lankan Airlines",
+      flight_number: "UL",
       flight_date: "July 16th, 2025",
       flight_time: "10:00AM"
     });
